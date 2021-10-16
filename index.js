@@ -86,7 +86,7 @@ let prefixes = []
 Object.keys(env).forEach(function(key){
 	let args = key.split(delimiter)
 	if(args.length && args[0] == prefix){
-		prefixes.push(array[1])
+		prefixes.push(args[1])
 	}
 })
 
