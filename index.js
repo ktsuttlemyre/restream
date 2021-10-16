@@ -1,9 +1,28 @@
 const NodeMediaServer = require('node-media-server');
 var pathToFfmpeg = require('ffmpeg-static');
 
-const template = function(templateString, templateVars){
-    return new Function("return `"+templateString +"`;").call(templateVars);
+
+
+const template = (template, vars = {}) => {
+  //https://gist.github.com/tmarshall/31e640e1fa80c597cc5bf78566b1274c
+  //https://stackoverflow.com/questions/30003353/can-es6-template-literals-be-substituted-at-runtime-or-reused
+  const handler = new Function('vars', [
+    'const tagged = ( ' + Object.keys(vars).join(', ') + ' ) =>',
+      '`' + template + '`',
+    'return tagged(...Object.values(vars))'
+  ].join('\n'))
+
+  return handler(vars)
 }
+
+
+// const templateString1 = 'Hello ${name}!'
+// console.log(templatized(templateString1, {
+//   name: 'world'
+// }))
+// // Hello world!
+
+
 function uuidv4() {
 // 	const crypto = require('crypto')
 // 	  let secret = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
@@ -95,11 +114,14 @@ Object.keys(env).forEach(function(key){
 Object.keys(env).forEach(function(key){
 	let args = key.split(delimiter)
 	//find tokens
+	
 	if(args.length && prefixes.indexOf(args[0]) >= 0 ){
+		let obj = {};
+		obj.token = obj.secret = obj.stream_key = obj.key = obj.stream = env[key]
 		let task = {
 			app: 'live',
 			mode: 'push',
-			edge: template(env[prefix+delimiter+args[0]],env[key]),
+			edge: template(env[prefix+delimiter+args[0]],obj),
 			appendName: false
 			}
 		console.log(`adding task ${JSON.stringify(task)}`)
