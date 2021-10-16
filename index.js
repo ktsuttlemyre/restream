@@ -1,13 +1,14 @@
 const NodeMediaServer = require('node-media-server');
-const crypto = require('crypto')
+
 
 const template = function(templateString, templateVars){
     return new Function("return `"+templateString +"`;").call(templateVars);
 }
 function uuidv4() {
-  let token = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
+	const crypto = require('crypto')
+	  let token = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+	    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+	  );
 	console.log("============================")
 	console.log("since you didn't set a secret in the config");
   	console.log(`Your stream secret token is:\n\t${secret}`)
