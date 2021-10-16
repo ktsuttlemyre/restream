@@ -12,6 +12,6 @@
   "author": "Kyle Suttlemyre",
   "license": "ISC",
   "dependencies": {
-    "node-media-servere": "2.3.8"
+    "node-media-server": "2.3.8"
   }
 }
