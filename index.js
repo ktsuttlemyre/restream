@@ -4,7 +4,21 @@ const NodeMediaServer = require('node-media-server');
 const template = function(templateString, templateVars){
     return new Function("return `"+templateString +"`;").call(templateVars);
 }
+function uuidv4() {
+  let token = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+	console.log("============================")
+	console.log("since you didn't set a secret in the config");
+  	console.log(`Your stream secret token is:\n\t${secret}`)
+	console.log("============================")
+}
 
+
+
+
+let env = process.env;
+let secret = env.SECRET || uuidv4();
 
 const config = {
   rtmp: {
@@ -21,18 +35,18 @@ const config = {
     allow_origin: '*',
     api: true
   },
-  https: {
-    port: 8443,
-    key: './privatekey.pem',
-    cert: './certificate.pem',
-  },
+//   https: {
+//     port: 8443,
+//     key: './privatekey.pem',
+//     cert: './certificate.pem',
+//   },
   auth: {
     api: true,
     api_user: 'admin',
     api_pass: 'admin',
     play: false,
     publish: false,
-    secret: 'nodemedia2017privatekey'
+    secret: secret
   },
     trans: {
     ffmpeg: '/usr/bin/ffmpeg',
@@ -58,7 +72,7 @@ const config = {
 };
 
 
-let env = process.env
+
 let delimiter = env.DELIMITER || '_';
 let prefix = env.PREFIX || 'SERVICE';
 let prefixes = []
