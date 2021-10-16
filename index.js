@@ -28,7 +28,7 @@ let secret = env.SECRET || uuidv4();
 
 const config = {
   rtmp: {
-    port: 1935,
+    port: env.PORT,
     chunk_size: 60000,
     gop_cache: true,
     ping: 30,
