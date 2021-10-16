@@ -1,5 +1,5 @@
 const NodeMediaServer = require('node-media-server');
-
+var pathToFfmpeg = require('ffmpeg-static');
 
 const template = function(templateString, templateVars){
     return new Function("return `"+templateString +"`;").call(templateVars);
@@ -55,7 +55,7 @@ const config = {
     secret: secret
   },
     trans: {
-    ffmpeg: '/usr/bin/ffmpeg',
+    ffmpeg: pathToFfmpeg,
     tasks: [
       {
         app: 'live',
@@ -72,7 +72,7 @@ const config = {
     ]
   },
   relay: {
-  ffmpeg: '/usr/bin/ffmpeg',
+  ffmpeg: pathToFfmpeg,
   tasks: []
   },
 };
