@@ -1,5 +1,11 @@
 const NodeMediaServer = require('node-media-server');
 
+
+const template = function(templateString, templateVars){
+    return new Function("return `"+templateString +"`;").call(templateVars);
+}
+
+
 const config = {
   rtmp: {
     port: 1935,
@@ -47,34 +53,41 @@ const config = {
   },
   relay: {
   ffmpeg: '/usr/bin/ffmpeg',
-  tasks: [
-    {
-      app: 'live',
-      mode: 'push',
-      edge: 'rtmp://a.rtmp.youtube.com/live2/wa5d-qfqg-e7z1-0r5m-5qa2',       //bumn
-	  appendName: false
-    },
-	{
-      app: 'live',
-      mode: 'push',
-      edge: 'rtmp://a.rtmp.youtube.com/live2/tzka-wqkx-b139-52ys-69e9',       //genUmkm
-	  appendName: false
-    },
-	{
-      app: 'live',
-      mode: 'push',
-      edge: 'rtmp://a.rtmp.youtube.com/live2/zwr2-4fgj-zt4p-hm0v-3bxc',       //pertamina
-	  appendName: false
-    },
-	{
-      app: 'live',
-      mode: 'push',
-      edge: 'rtmp://a.rtmp.youtube.com/live2/x1ke-8dkm-68x4-6yet',       //calonpintar
-	  appendName: false
-    }
-  ]
+  tasks: []
   },
 };
+
+
+let env = process.env
+let delimiter = env.DELIMITER || '_';
+let prefix = env.PREFIX || 'SERVICE';
+let prefixes = []
+
+Object.keys(env).forEach(function(key){
+	let args = key.split(delimiter)
+	if(args.length && args[0] == prefix){
+		prefixes.push(array[1])
+	}
+})
+
+
+
+Object.keys(env).forEach(function(key){
+	let args = key.split(delimiter)
+	//find tokens
+	if(args.length && prefixes.indexOf(args[0]) >= 0 ){
+		let task = {
+			app: 'live',
+			mode: 'push',
+			edge: template(env[prefix+delimiter+args[0]],env[key]),
+			appendName: false
+			}
+		console.log(`adding task ${JSON.stringify(task)}`)
+		config.relay.tasks.push(task);
+	}
+})
+
+
 
 
 let nms = new NodeMediaServer(config)
