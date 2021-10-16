@@ -12,6 +12,7 @@
   "author": "Kyle Suttlemyre",
   "license": "ISC",
   "dependencies": {
-    "node-media-server": "^2.3.8"
+    "ffmpeg-static": "^4.4.0",
+    "node-media-server": "^2.3.8",
   }
 }
