@@ -1,5 +1,5 @@
 const NodeMediaServer = require('node-media-server');
-
+const crypto = require('crypto')
 
 const template = function(templateString, templateVars){
     return new Function("return `"+templateString +"`;").call(templateVars);
